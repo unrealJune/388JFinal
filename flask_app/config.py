@@ -5,5 +5,5 @@ import os
 # print(my_secret)
 # print(my_pass)
 # # Stores all configuration values
-# SECRET_KEY = b'\x020;yr\x91\x11\xbe"\x9d\xc1\x14\x91\xadf\xec' 
+SECRET_KEY = b'\x020;yr\x91\x11\xbe"\x9d\xc1\x14\x91\xadf\xec' 
 MONGODB_HOST = os.environ['MONGOURL']
