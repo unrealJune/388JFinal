@@ -1,0 +1,112 @@
+{% extends "header.html" %}
+{% block content %}
+
+<script>
+
+</script>
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="mdl-grid">
+
+    <div class="mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            {% for message in messages %}
+
+            {{ message }}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+
+</div>
+{% endif %}
+{% endwith %}
+
+
+<div class="mdl-grid">
+
+    <div class="mdl-cell--3-col" style="padding-left: 40px; padding-right: 10px;">
+
+        <h4>Search For Playlists!</h4>
+        <form action="/" class="" method="POST">
+            {{ form.csrf_token }}
+            <div class="mdl-textfield mdl-js-textfield">
+                {{ form.search_query(class="mdl-textfield__input", type="text", id="search_query", placeholder="Search For Playlists!") }}
+
+            </div>
+            {% if form.search_query.errors %}
+            <div class="alert alert-warning" role="alert">
+                {% for error in form.search_query.errors %}
+                <span style="color: red; font-size: 10;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {{ form.submit(class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent")
+            }}
+
+
+
+
+        </form>
+
+
+
+    </div>
+    <div class="mdl-cell--5-col" style="padding-left: 50px;">
+        <h4>Search Results</h4>
+        {% if playlists %}
+        <table class="mdl-data-table mdl-js-data-table" style="width: 700;">
+            <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Name</th>
+                    <th class="mdl-data-table__cell--non-numeric">Description</th>
+
+                    <th class="mdl-data-table__cell--non-numeric">Duration</th>
+                    <th class="mdl-data-table__cell--non-numeric">Likes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pl in playlists %}
+                <tr>
+
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.name }}</td>
+                    {% if pl.description|length > 15 %}
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.description[:15] }}...</td>
+                    {% else %}
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.description }}</td>
+                    {% endif %}
+
+                    <td class="mdl-data-table__cell--non-numeric">{{'{0:.2f}'.format(pl.duration / 1000 /60) }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.likes }}</td>
+                    <td class="mdl-data-table__cell--non-numeric" >
+                        <a href="{{ url_for('playlists.view', uuid=pl.uuid) }}", title="View Playlist">
+                            <span class="material-icons" style="color:black;">
+                                chevron_right
+                                </span>
+                        </a>
+                    </td>
+
+
+
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h6>No results found!</h6>
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}

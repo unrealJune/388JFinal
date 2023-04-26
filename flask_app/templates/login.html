@@ -1,0 +1,58 @@
+{% extends "header.html" %}
+{% block content %}
+
+<script>
+
+</script>
+<h2>Log In</h2>
+<div class="mdl-grid">
+    <h6>If you don't have an account, then <a href="{{ url_for('user.register') }}">Register!</a></h4>
+</div>
+
+    
+{% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="mdl-grid">
+
+                <div class="mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__supporting-text"> 
+                        {% for message in messages %}
+
+            {{ message }}
+
+            {% endfor %}
+            
+                    </div>
+            
+                </div>
+                
+            
+            
+            </div>
+            {% endif %}
+{% endwith %}
+
+
+<div class="mdl-grid">
+
+    <form action="" method="post">
+        {{ form.csrf_token }}
+
+        <div class="mdl-textfield mdl-js-textfield">
+
+            {{ form.username(class="mdl-textfield__input", type="text", id="username", autocomplete="off") }}
+            {{ form.username.label(class="mdl-textfield__label", for="username") }}
+            
+        </div>
+        <div class="mdl-textfield mdl-js-textfield">
+
+            {{ form.password(class="mdl-textfield__input", type="password", id="passsword", autocomplete="off") }}
+            {{ form.password.label(class="mdl-textfield__label", for="password") }}
+        
+        </div>
+
+
+        {{ form.submit(class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent") }}
+    </form>
+</div>
+{% endblock %}
