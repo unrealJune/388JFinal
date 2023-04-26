@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block header %}
+
+<!-- The drawer is always open in large screens. The header is always shown,
+  even in small screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+  mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">PlaylistsApp</span>
+        {% if current_user.is_authenticated %}
+        <span class="mdl-layout-title">Hello, {{ current_user.username }}!</span>
+        {% endif %}
+
+
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="{{ url_for('playlists.index') }}">
+                <i class="material-icons">home</i>
+                 Home</a>
+            {% if current_user.is_authenticated %}
+            <a class="mdl-navigation__link" href="{{ url_for('playlists.create') }}">
+                <i class="material-icons">add</i>
+                Create New Playlist</a>
+            <a class="mdl-navigation__link" href="{{ url_for('user.account') }}">
+                <i class="material-icons">person</i>
+                Your Account</a>
+            <a class="mdl-navigation__link" href="{{ url_for('user.logout') }}">
+                <i class="material-icons">logout</i>
+                Logout</a>
+            {% else %}
+            <a class="mdl-navigation__link" href="{{ url_for('user.login') }}">
+                <i class="material-icons">login</i>
+                Login/Register</a>
+
+            {% endif %}
+
+            
+        </nav>
+    </div>
+    <main class="mdl-layout__content">
+       
+
+            {% block content %}
+
+            <h1>OVERRIDE</h1>
+            {% endblock %}
+        
+    </main>
+</div>
+
+{% endblock %}
