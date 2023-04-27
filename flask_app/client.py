@@ -1,4 +1,3 @@
-import pylast
 import os
 import pprint
 import spotipy
