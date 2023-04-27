@@ -6,27 +6,6 @@
 </script>
 
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="mdl-grid">
-
-    <div class="mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__supporting-text">
-            {% for message in messages %}
-
-            {{ message }}
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-
-
-</div>
-{% endif %}
-{% endwith %}
 
 
 

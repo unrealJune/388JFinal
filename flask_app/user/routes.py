@@ -65,7 +65,7 @@ def account():
             playlist.duration = 0
             for mbid in playlist.songs:
                 song = SongClient().get_track_by_mbid(mbid)
-                playlist.duration += song.get_duration()
+                playlist.duration += song.duration
             playlist.save()
         
         form = SearchForm()

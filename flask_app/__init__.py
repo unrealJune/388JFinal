@@ -39,8 +39,7 @@ csp = {
     ],
     'img-src': [
         '\'self\'',
-        'https://lastfm.freetls.fastly.net',
-        'https://lastfm-img2.akamaized.net',
+        'https://i.scdn.co',
     ],
     
 }

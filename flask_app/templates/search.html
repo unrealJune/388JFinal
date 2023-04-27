@@ -6,27 +6,7 @@
 </script>
 
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="mdl-grid">
 
-    <div class="mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__supporting-text">
-            {% for message in messages %}
-
-            {{ message }}
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-
-
-</div>
-{% endif %}
-{% endwith %}
 
 
 <div class="mdl-grid">
@@ -82,7 +62,11 @@
                     <td class="mdl-data-table__cell--non-numeric">{{ pl.description }}</td>
                     {% endif %}
 
-                    <td class="mdl-data-table__cell--non-numeric">{{'{0:.2f}'.format(pl.duration / 1000 /60) }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ 
+                        (pl.duration / 1000 // 60)|int }}:{{
+                        (pl.duration / 1000 % 60)|int }}
+                    
+                    </td>
                     <td class="mdl-data-table__cell--non-numeric">{{ pl.likes }}</td>
                     <td class="mdl-data-table__cell--non-numeric" >
                         <a href="{{ url_for('playlists.view', uuid=pl.uuid) }}", title="View Playlist">

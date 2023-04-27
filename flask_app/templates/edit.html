@@ -6,33 +6,11 @@
 </script>
 
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="mdl-grid">
-
-    <div class="mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__supporting-text">
-            {% for message in messages %}
-
-            {{ message }}
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-
-
-</div>
-{% endif %}
-{% endwith %}
-
 
 <div class="mdl-grid">
 
-    <div class="mdl-cell--2-col", style="padding-left: 30px;">
-        
+    <div class="mdl-cell--2-col" , style="padding-left: 30px;">
+
         <form action="" method="post">
             <h4>Edit Info</h4>
             {{ form.csrf_token }}
@@ -65,12 +43,13 @@
                     {% endif %}
 
                 </div>
-               <div> {{ form.submit(class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent")
-            }}</div>
+                <div> {{ form.submit(class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                    mdl-button--accent")
+                    }}</div>
 
             </div>
 
-           
+
         </form>
     </div>
     <div class="mdl-cell">
@@ -106,6 +85,7 @@
         <table class="mdl-data-table mdl-js-data-table">
             <thead>
                 <tr>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
                     <th class="mdl-data-table__cell--non-numeric">Title</th>
                     <th class="mdl-data-table__cell--non-numeric">Artist</th>
                     <th class="mdl-data-table__cell--non-numeric">Duration</th>
@@ -117,16 +97,20 @@
             <tbody>
                 {% for song in songs %}
                 <tr>
-  <td class="mdl-data-table__cell--non-numeric">
-                        <img src="{{ song.get_cover_image() }}" alt=""
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <img src="{{ song.image }}" alt=""
                             style="width: 50; height: 50; object-fit: cover;">
                     </td>
-                    <td class="mdl-data-table__cell--non-numeric">{{ song.get_name() }}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{ song.get_artist() }}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{ '{0:.2f}'.format(song.get_duration() / 1000 /60) }}
+                    <td class="mdl-data-table__cell--non-numeric">{{ song.name }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ song.artist }}</td>
+                  
+                    <td class="mdl-data-table__cell--non-numeric">{{ 
+                        (song.duration / 1000 // 60)|int }}:{{
+                        (song.duration / 1000 % 60)|int }}
+                    
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
-                        <a href="{{ url_for('playlists.deleteSong', uuid=playlist.uuid, mbid=song.get_mbid()) }}" ,
+                        <a href="{{ url_for('playlists.deleteSong', uuid=playlist.uuid, mbid=song.mbid) }}" ,
                             title="Delete">
                             <span class="material-icons" style="color:black;">
                                 delete
@@ -150,47 +134,52 @@
 <div class="mdl-grid">
     <div class="mdl-cell--4-col"></div>
     <div class="mdl-cell>">
-            <h4>Top Tracks</h4>
-            <table class="mdl-data-table mdl-js-data-table">
-                <thead>
-                    <tr>
-                        <th class="mdl-data-table__cell--non-numeric"></th>
-                        <th class="mdl-data-table__cell--non-numeric">Title</th>
-                        <th class="mdl-data-table__cell--non-numeric">Artist</th>
-                        <th class="mdl-data-table__cell--non-numeric">Duration</th>
+        <h4>Recommendations</h4>
+        <table class="mdl-data-table mdl-js-data-table">
+            <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
+                    <th class="mdl-data-table__cell--non-numeric">Title</th>
+                    <th class="mdl-data-table__cell--non-numeric">Artist</th>
+                    <th class="mdl-data-table__cell--non-numeric">Duration</th>
 
 
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ss in top15 %}
-                    <tr>
+                </tr>
+            </thead>
+            <tbody>
+                {% if top15 %}
+                {% for ss in top15 %}
+                <tr>
 
-                        <td class="mdl-data-table__cell--non-numeric">
-                            <img src="{{ ss.get_cover_image() }}" alt=""
-                                style="width: 50; height: 50; object-fit: cover;">
-                        </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <img src="{{ ss.image }}" alt="" style="width: 50; height: 50; object-fit: cover;">
+                    </td>
 
-                        <td class="mdl-data-table__cell--non-numeric">{{ ss.get_title() }}</td>
-                        <td class="mdl-data-table__cell--non-numeric">{{ ss.get_artist() }}</td>
-                        <td class="mdl-data-table__cell--non-numeric">{{ '{0:.2f}'.format(ss.get_duration() / 1000 /60)
-                            }}
-                        </td>
-                        <td class="mdl-data-table__cell--non-numeric">
-                            <a href="{{ url_for('playlists.addSong', uuid=playlist.uuid, mbid=ss.get_mbid()) }}" ,
-                                title="Add To Playlist">
-                                <span class="material-icons" style="color:black;">
-                                    add
-                                </span>
-                            </a>
-                        </td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ ss.title }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ ss.artist }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ 
+                        (ss.duration / 1000 // 60)|int }}:{{
+                        (ss.duration / 1000 % 60)|int }}
+                    
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <a href="{{ url_for('playlists.addSong', uuid=playlist.uuid, mbid=ss.mbid) }}" ,
+                            title="Add To Playlist">
+                            <span class="material-icons" style="color:black;">
+                                add
+                            </span>
+                        </a>
+                    </td>
 
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <h6>Add songs for some recommendations!</h6>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
     <div class="mdl-cell"></div>
 
 </div>

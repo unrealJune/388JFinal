@@ -1,3 +1,4 @@
+import random
 from flask import Blueprint, render_template, url_for, redirect, request, flash
 from flask_login import current_user, login_required, login_user, logout_user
 import uuid
@@ -13,15 +14,13 @@ def index():
         return redirect(url_for('playlists.search', query=form.search_query.data))
     
     #get top 10 playlists
-    playlists = Playlist.objects.order_by('likes')[:10]
+    playlists = Playlist.objects.order_by('-likes').limit(10)
 
     #calculate duration of playlist
     for playlist in playlists:
         playlist.duration = 0
         for song in playlist.songs:
-            track = SongClient().get_track_by_mbid(song)
-            playlist.duration += track.get_duration()
-            playlist.save()
+            playlist.duration += SongClient().get_track_by_mbid(song).duration
 
     
 
@@ -58,9 +57,8 @@ def edit(uuid):
             song = SongClient().get_track(playForm.artist.data, playForm.song.data)
             
             try:
-                mbid = song.get_mbid()
-                print(song)
-                playlist.songs.append(mbid)
+                song.mbid
+                playlist.songs.append(song.mbid)
                 playlist.save()
                 return redirect(url_for('playlists.edit', uuid=playlist.uuid))
             except:
@@ -77,13 +75,25 @@ def edit(uuid):
             form.name.data = playlist.name
             form.description.data = playlist.description
 
-        top = SongClient().get_topN_tracks(10)
+   
       
         
         songs = []
 
         for mbid in playlist.songs:
             songs.append(SongClient().get_track_by_mbid(mbid))
+
+        numSongs = 15 // len(songs)
+        
+        top = []
+        for song in songs:
+            top.extend(SongClient().get_topN_tracks(numSongs, song.artist))
+        
+        random.shuffle(top)
+
+        
+
+
             
 
 
@@ -122,7 +132,7 @@ def search(query):
         playlist.duration = 0
         for song in playlist.songs:
             track = SongClient().get_track_by_mbid(song)
-            playlist.duration += track.get_duration()
+            playlist.duration += track.duration
             playlist.save()
 
 
@@ -172,7 +182,7 @@ def view(uuid):
         
         total_duration = 0
         for song in songs:
-            total_duration += song.get_duration()
+            total_duration += song.duration
 
         liked = False
         if current_user.is_authenticated:

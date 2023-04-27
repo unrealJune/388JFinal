@@ -6,27 +6,6 @@
 </script>
 
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="mdl-grid">
-
-    <div class="mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__supporting-text">
-            {% for message in messages %}
-
-            {{ message }}
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-
-
-</div>
-{% endif %}
-{% endwith %}
 
 
 <div class="mdl-grid">
@@ -37,7 +16,11 @@
         <h6>Account Stats:</h6>
         <h6>Playlists Created: {{ playlists|length }}</h6>
         <h6>Playlists Liked: {{ user.liked_playlists|length }}</h6>
-        <h6>Total Duration of All Playlists: {{'{0:.2f}'.format(total_duration / 1000 /60) }}</h6>
+        <h6>Total Duration of All Playlists:  <td class="mdl-data-table__cell--non-numeric">{{ 
+            (total_duration / 1000 // 60)|int }}:{{
+            (total_duration / 1000 % 60)|int }}
+        
+        </td></h6>
         <h6>Total Number of Likes: {{ total_likes }}</h6>
 
 
@@ -88,7 +71,11 @@
                 <tr>
                    
                     <td class="mdl-data-table__cell--non-numeric" >{{ pl.name }}</td>
-                    <td class="mdl-data-table__cell--non-numeric" >{{'{0:.2f}'.format(pl.duration / 1000 /60) }}</td> 
+                    <td class="mdl-data-table__cell--non-numeric">{{ 
+                        (pl.duration / 1000 // 60)|int }}:{{
+                        (pl.duration / 1000 % 60)|int }}
+                    
+                    </td>
                     <td class="mdl-data-table__cell--non-numeric" >{{ pl.likes }}</td>
                     <td class="mdl-data-table__cell--non-numeric" >
                         <a href="{{ url_for('playlists.edit', uuid=pl.uuid) }}", title="Edit">
