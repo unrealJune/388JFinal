@@ -77,15 +77,18 @@ def edit(uuid):
             form.name.data = playlist.name
             form.description.data = playlist.description
 
-        top15 = SongClient().get_top_tracks()
+        top = SongClient().get_topN_tracks(10)
+      
+        
         songs = []
 
         for mbid in playlist.songs:
             songs.append(SongClient().get_track_by_mbid(mbid))
+            
 
 
 
-        return render_template('edit.html', title="Edit Playlist", form=form, playForm = playForm, songs=songs, playlist=playlist, top15=top15)
+        return render_template('edit.html', title="Edit Playlist", form=form, playForm = playForm, songs=songs, playlist=playlist, top15=top)
 
 @playlists.route('/delete/<uuid>', methods=['GET', 'POST'])
 def delete(uuid):
@@ -125,7 +128,7 @@ def search(query):
 
     return render_template('search.html', title="Search", playlists=playlists, query=query, form=form)
 
-@playlists.route('/deleteTrack/<mbid>/<uuid>', methods=['GET', 'POST'])
+@playlists.route('/deleteSong/<mbid>/<uuid>', methods=['GET', 'POST'])
 def deleteSong(uuid, mbid):
     playlist = Playlist.objects(uuid=uuid).first()
     if playlist is None or  playlist.owner != current_user._get_current_object():
@@ -137,7 +140,7 @@ def deleteSong(uuid, mbid):
         return redirect(url_for('playlists.edit', uuid=playlist.uuid))
     
 
-@playlists.route('/addTrack/<mbid>/<uuid>', methods=['GET', 'POST'])
+@playlists.route('/addSong/<mbid>/<uuid>', methods=['GET', 'POST'])
 def addSong(uuid, mbid):
     playlist = Playlist.objects(uuid=uuid).first()
     if playlist is None or  playlist.owner != current_user._get_current_object():
@@ -155,10 +158,13 @@ def view(uuid):
         flash('Playlist not found', 'danger')
         return redirect(url_for('playlists.index'))
     else:
+        song = SongClient().get_track_by_mbid(playlist.songs[0])
         songs = []
 
         for mbid in playlist.songs:
+        
             songs.append(SongClient().get_track_by_mbid(mbid))
+
         
         form = SearchForm()
         if form.validate_on_submit():

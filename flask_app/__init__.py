@@ -37,6 +37,11 @@ csp = {
         'https://fonts.googleapis.com',
         'https://fonts.gstatic.com',
     ],
+    'img-src': [
+        '\'self\'',
+        'https://lastfm.freetls.fastly.net',
+        'https://lastfm-img2.akamaized.net',
+    ],
     
 }
         

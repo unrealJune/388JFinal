@@ -41,7 +41,7 @@
        
 
     </div>
-    <div class="mdl-cell--5-col">
+    <div class="mdl-cell--4-col">
         <h4>Search For Playlists!</h4>
         <form action="/" class="" method="POST">
             {{ form.csrf_token }}
@@ -67,7 +67,7 @@
     </div>
 
     
-    <div class="mdl-cell--3-col">
+    <div class="mdl-cell--4-col">
         
         <h4>Top Playlists!</h4>
         {% if playlists %}
@@ -92,7 +92,13 @@
                     {% endif %}
                     <td class="mdl-data-table__cell--non-numeric" >{{'{0:.2f}'.format(pl.duration / 1000 /60) }}</td> 
                     <td class="mdl-data-table__cell--non-numeric" >{{ pl.likes }}</td>
-                  
+                    <td class="mdl-data-table__cell--non-numeric" >
+                        <a href="{{ url_for('playlists.view', uuid=pl.uuid) }}", title="View Playlist">
+                            <span class="material-icons" style="color:black;">
+                                chevron_right
+                                </span>
+                        </a>
+                    </td>
 
                     
                    

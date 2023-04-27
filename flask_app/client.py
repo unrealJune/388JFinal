@@ -22,26 +22,21 @@ class SongClient():
         res = self.network.get_track_by_mbid(mbid)
         return res
     
-    def get_top_tracks(self):
+    def get_topN_tracks(self, n):
         out = []
-        res = self.network.get_geo_top_tracks(country="United States", location=None, limit=15)
-        for top in res:
-            out.append(
-                self.get_track(top.item.get_artist(), top.item.get_name())
-            )
-        
+        res = self.network.get_geo_top_tracks(country="United States", location=None, limit=n * 2, cacheable=True) 
+        for track in res:
+          
+            if len(out) < n and track.item.get_mbid() is not None:
+                out.append(track.item)
+            
+            #print album art
+            #print(track.item.get_cover_image())
+            
+    
         return out
     
 
-if __name__ == "__main__":
-    song = SongClient().get_track("FMNESAGJOISEJGIOJOGEIJOGSISES", "GSJIASEIOGJIGJIGIG")
-    
-    #try to get mbid
-    try:
-        mbid = song.get_mbid()
-        print(mbid)
-    except:
-        print("no mbid")
         
 
 
