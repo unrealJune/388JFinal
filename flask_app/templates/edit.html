@@ -9,49 +9,7 @@
 
 <div class="mdl-grid">
 
-    <div class="mdl-cell--2-col" , style="padding-left: 30px;">
 
-        <form action="" method="post">
-            <h4>Edit Info</h4>
-            {{ form.csrf_token }}
-
-            <div class="mdl-grid">
-                <div class="mdl-textfield mdl-js-textfield">
-                    {{ form.name(class="mdl-textfield__input", type="text", id="name", autocomplete="off") }}
-                    {{ form.name.label(class="mdl-textfield__label", for="name") }}
-                    {% if form.name.errors %}
-                    <div class="alert alert-warning" role="alert">
-                        {% for error in form.name.errors %}
-                        <span style="color: red; font-size: 10;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
-                </div>
-            </div>
-            <div class="mdl-grid">
-                <div class="mdl-textfield mdl-js-textfield">
-
-                    {{ form.description(class="mdl-textfield__input", type="text", rows = "3", id="description") }}
-                    {{ form.description.label(class="mdl-textfield__label", for="description") }}
-                    {% if form.description.errors %}
-                    <div class="alert alert-warning" role="alert">
-                        {% for error in form.description.errors %}
-                        <span style="color: red; font-size: 10;">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
-                </div>
-                <div> {{ form.submit(class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
-                    mdl-button--accent")
-                    }}</div>
-
-            </div>
-
-
-        </form>
-    </div>
     <div class="mdl-cell">
         <form action="" method="post">
             <h4>Add Song</h4>
@@ -77,14 +35,53 @@
 
         </form>
 
+        <form action="" method="post">
+            <h4>Edit Info</h4>
+            {{ form.csrf_token }}
+
+                <div class="mdl-textfield mdl-js-textfield">
+                    {{ form.name(class="mdl-textfield__input", type="text", id="name", autocomplete="off") }}
+                    {{ form.name.label(class="mdl-textfield__label", for="name") }}
+                    {% if form.name.errors %}
+                    <div class="alert alert-warning" role="alert">
+                        {% for error in form.name.errors %}
+                        <span style="color: red; font-size: 10;">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                </div>
+            <div class="mdl-textfield mdl-js-textfield">
+
+                {{ form.description(class="mdl-textfield__input", type="text", rows = "3", id="description") }}
+                {{ form.description.label(class="mdl-textfield__label", for="description") }}
+                {% if form.description.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.description.errors %}
+                    <span style="color: red; font-size: 10;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+            <div> {{ form.submit(class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect
+                mdl-button--accent")
+                }}</div>
+
+
+
+        </form>
+
 
     </div>
-    <div class="mdl-cell">
+    <div class="mdl-cell--3-col">
         <h4>Playlist</h4>
         {% if songs %}
         <table class="mdl-data-table mdl-js-data-table">
             <thead>
                 <tr>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
                     <th class="mdl-data-table__cell--non-numeric"></th>
                     <th class="mdl-data-table__cell--non-numeric">Title</th>
                     <th class="mdl-data-table__cell--non-numeric">Artist</th>
@@ -98,18 +95,6 @@
                 {% for song in songs %}
                 <tr>
                     <td class="mdl-data-table__cell--non-numeric">
-                        <img src="{{ song.image }}" alt=""
-                            style="width: 50; height: 50; object-fit: cover;">
-                    </td>
-                    <td class="mdl-data-table__cell--non-numeric">{{ song.name }}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{ song.artist }}</td>
-                  
-                    <td class="mdl-data-table__cell--non-numeric">{{ 
-                        (song.duration / 1000 // 60)|int }}:{{
-                        (song.duration / 1000 % 60)|int }}
-                    
-                    </td>
-                    <td class="mdl-data-table__cell--non-numeric">
                         <a href="{{ url_for('playlists.deleteSong', uuid=playlist.uuid, mbid=song.mbid) }}" ,
                             title="Delete">
                             <span class="material-icons" style="color:black;">
@@ -117,6 +102,24 @@
                             </span>
                         </a>
                     </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <img src="{{ song.image }}" alt="" style="width: 50; height: 50; object-fit: cover;">
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <audio controls>
+                            <source src="{{ song.preview_url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ song.name }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ song.artist }}</td>
+
+                    <td class="mdl-data-table__cell--non-numeric">{{
+                        (song.duration / 1000 // 60)|int }}:{{
+                        (song.duration / 1000 % 60)|int }}
+
+                    </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -134,11 +137,14 @@
 <div class="mdl-grid">
     <div class="mdl-cell--4-col"></div>
     <div class="mdl-cell>">
+        {% if top15 %}
         <h4>Recommendations</h4>
         <table class="mdl-data-table mdl-js-data-table">
             <thead>
                 <tr>
                     <th class="mdl-data-table__cell--non-numeric"></th>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
+
                     <th class="mdl-data-table__cell--non-numeric">Title</th>
                     <th class="mdl-data-table__cell--non-numeric">Artist</th>
                     <th class="mdl-data-table__cell--non-numeric">Duration</th>
@@ -148,20 +154,26 @@
                 </tr>
             </thead>
             <tbody>
-                {% if top15 %}
+
                 {% for ss in top15 %}
                 <tr>
 
                     <td class="mdl-data-table__cell--non-numeric">
                         <img src="{{ ss.image }}" alt="" style="width: 50; height: 50; object-fit: cover;">
                     </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <audio controls>
+                            <source src="{{ ss.preview_url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
 
-                    <td class="mdl-data-table__cell--non-numeric">{{ ss.title }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ ss.name }}</td>
                     <td class="mdl-data-table__cell--non-numeric">{{ ss.artist }}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{ 
+                    <td class="mdl-data-table__cell--non-numeric">{{
                         (ss.duration / 1000 // 60)|int }}:{{
                         (ss.duration / 1000 % 60)|int }}
-                    
+
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
                         <a href="{{ url_for('playlists.addSong', uuid=playlist.uuid, mbid=ss.mbid) }}" ,
@@ -176,9 +188,10 @@
                 {% endfor %}
                 {% else %}
                 <h6>Add songs for some recommendations!</h6>
-                {% endif %}
+
             </tbody>
         </table>
+        {% endif %}
     </div>
     <div class="mdl-cell"></div>
 

@@ -41,6 +41,11 @@ csp = {
         '\'self\'',
         'https://i.scdn.co',
     ],
+    'media-src': [
+        "https://p.scdn.co",
+        '\'self\'',
+    ],
+    
     
 }
         

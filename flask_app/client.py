@@ -24,7 +24,11 @@ class SongClient():
     def get_track(self, artist, query):
         #get track id
         res = self.sp.search(q='artist:' + artist + ' track:' + query, type='track')
+        #throw error if no results
+        if len(res['tracks']['items']) == 0:
+            return None
         id = res['tracks']['items'][0]['id']
+        
     
         return self.get_track_by_mbid(id)
     

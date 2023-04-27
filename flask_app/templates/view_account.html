@@ -1,0 +1,105 @@
+{% extends "header.html" %}
+{% block content %}
+
+<script>
+
+</script>
+
+
+
+
+<div class="mdl-grid">
+    
+    <div class="mdl-cell--3-col" style="padding-left: 40px;">
+        
+        <h4>{{ user.username }}!</h4>
+        <h6>Account Stats:</h6>
+        <h6>Playlists Created: {{ playlists|length }}</h6>
+        <h6>Playlists Liked: {{ user.liked_playlists|length }}</h6>
+        <h6>Total Duration of All Playlists:  <td class="mdl-data-table__cell--non-numeric">{{ 
+            (total_duration / 1000 // 60)|int }}:{{
+            (total_duration / 1000 % 60)|int }}
+        
+        </td></h6>
+        <h6>Total Number of Likes: {{ total_likes }}</h6>
+
+
+        
+       
+
+    </div>
+    <div class="mdl-cell--5-col">
+        <h4>Search For Playlists!</h4>
+        <form action="/" class="" method="POST">
+            {{ form.csrf_token }}
+            <div class = "mdl-textfield mdl-js-textfield">
+                {{ form.search_query(class="mdl-textfield__input", type="text", id="search_query", placeholder="Search For Playlists!", style="width:400;") }}
+    
+            </div>
+            {% if form.search_query.errors %}
+            <div class="alert alert-warning" role="alert">
+                {% for error in form.search_query.errors %}
+                <span style="color: red; font-size: 10;">{{ error }}</span>
+                {% endfor %} 
+            </div>  
+            {% endif %}
+            {{ form.submit(class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent") }}
+            
+    
+    
+           
+        </form>
+       
+
+    </div>
+
+    
+    <div class="mdl-cell--3-col">
+        
+        <h4>Playlists!</h4>
+        {% if playlists %}
+        <table class="mdl-data-table mdl-js-data-table">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                <th class="mdl-data-table__cell--non-numeric">Duration</th>
+                <th class="mdl-data-table__cell--non-numeric">Likes</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for pl in playlists %}
+                <tr>
+                   
+                    <td class="mdl-data-table__cell--non-numeric" >{{ pl.name }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ 
+                        (pl.duration / 1000 // 60)|int }}:{{
+                        (pl.duration / 1000 % 60)|int }}
+                    
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric" >{{ pl.likes }}</td>
+                    <td class="mdl-data-table__cell--non-numeric" >
+                        <a href="{{ url_for('playlists.view', uuid=pl.uuid) }}", title="Open Playlist">
+                            <span class="material-icons" style="color:black;">
+                                chevron_right
+                                </span>
+                        </a>
+                    </td>
+     
+
+                    
+                   
+                    
+                  </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+            {% else %}
+            <h6>No playlists found!</h6>
+            {% endif %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}

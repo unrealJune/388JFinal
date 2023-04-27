@@ -83,7 +83,7 @@ def edit(uuid):
         for mbid in playlist.songs:
             songs.append(SongClient().get_track_by_mbid(mbid))
 
-        numSongs = 15 // len(songs)
+        numSongs = 16 // ( len(songs) + 1)
         
         top = []
         for song in songs:
@@ -124,7 +124,7 @@ def search(query):
 
     
     #get all playlists that match query
-    playlists = Playlist.objects(name__icontains=query)
+    playlists = Playlist.objects(name__icontains=query).order_by('-likes')
 
 
         #calculate duration of playlist

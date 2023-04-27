@@ -44,7 +44,7 @@
             (total_duration / 1000 // 60)|int }}:{{
             (total_duration / 1000 % 60)|int }}  </h4>
         <p>{{ playlist.description }}</p>
-        <h6>Created by: {{ playlist.owner.username }}</h6>
+        <h6>Created by:  <a href="{{ url_for('user.view_account', username=playlist.owner.username)}}">{{ playlist.owner.username }}</a></h6>
         <h6>Number of songs: {{ songs|length }} | Likes {{ playlist.likes }}</h6>
 
         {% if liked %}
@@ -70,6 +70,8 @@
             <thead>
                 <tr>
                     <th class="mdl-data-table__cell--non-numeric"></th>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
+
                     <th class="mdl-data-table__cell--non-numeric">Title</th>
                     <th class="mdl-data-table__cell--non-numeric">Artist</th>
                     <th class="mdl-data-table__cell--non-numeric">Duration</th>
@@ -86,6 +88,12 @@
                     <td class="mdl-data-table__cell--non-numeric">
                         <img src="{{ song.image }}" alt=""
                             style="width: 50; height: 50; object-fit: cover;">
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <audio controls>
+                            <source src="{{ song.preview_url }}" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                          </audio>
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">{{ song.name }}</td>
                     <td class="mdl-data-table__cell--non-numeric">{{ song.artist }}</td>

@@ -39,12 +39,14 @@ class RegistrationForm(FlaskForm):
     def validate_password(self, password):
         if len(password.data) < 8:
             raise ValidationError("Password must be at least 8 characters long")
-        if(password.data.isalpha()):
-            raise ValidationError("Password must contain at least one number or special character" )
+        #check if there is a capital letter
+        if not any(char.isupper() for char in password.data):
+            raise ValidationError("Password must contain at least one capital letter")
         #check if includes number and special character
         specialchars= '!@#$%^&*()_+{}|:"<>?`-=[]\;\',./'
         if not any(char.isdigit() for char in password.data) and not any(char in specialchars for char in password.data):
             raise ValidationError("Password must contain at least one number or special character" )
+        
         
 
 
@@ -60,7 +62,7 @@ class SearchForm(FlaskForm):
     submit = SubmitField("Search")
 
 class PlaylistMetadataForm(FlaskForm):
-    name = StringField("Name", validators=[InputRequired(), Length(min=1, max=100)])
+    name = StringField("Name", validators=[InputRequired(), Length(min=1, max=50)])
     description = TextAreaField("Description", validators=[Length(min=5, max=1000), InputRequired()])
     submit = SubmitField("Submit")
 
