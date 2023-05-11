@@ -60,13 +60,7 @@ def account():
     else:
     
         playlists = Playlist.objects(owner=current_user._get_current_object())
-        #calculate duration of each playlist
-        for playlist in playlists:
-            playlist.duration = 0
-            for mbid in playlist.songs:
-                song = SongClient().get_track_by_mbid(mbid)
-                playlist.duration += song.duration
-            playlist.save()
+    
         
         form = SearchForm()
         if form.validate_on_submit():
@@ -89,14 +83,7 @@ def view_account(username):
     user = User.objects(username=username).first()
     print(user)
     playlists = Playlist.objects(owner=user)
-    #calculate duration of each playlist
-
-    for playlist in playlists:
-        playlist.duration = 0
-        for mbid in playlist.songs:
-            song = SongClient().get_track_by_mbid(mbid)
-            playlist.duration += song.duration
-        playlist.save()
+  
 
     #calculate total duration of all playlists
     total_duration = 0
@@ -110,3 +97,24 @@ def view_account(username):
         return redirect(url_for('playlists.search', query=form.search_query.data))
     
     return render_template('view_account.html', title="Account", playlists=playlists, total_duration=total_duration, total_likes=total_likes, user = user, form = form)
+
+
+@user.route('/liked/<username>', methods=['GET', 'POST'])
+def liked(username):
+    user = User.objects(username=username).first()
+    liked = user.liked_playlists
+    
+    #get liked playlists
+    liked_playlists = []
+    for playlist in liked:
+        pl = Playlist.objects(uuid=playlist).first()
+        liked_playlists.append(Playlist.objects(uuid=playlist).first())
+
+
+
+
+  
+
+
+    return render_template('liked.html', title="Liked", playlists=liked_playlists, user=current_user._get_current_object())
+

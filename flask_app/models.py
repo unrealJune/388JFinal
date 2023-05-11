@@ -15,6 +15,7 @@ class User(db.Document, UserMixin):
     def get_id(self):
         return self.username
 
+
 class Playlist(db.Document):
     #list of songs
     songs = db.ListField(db.StringField(), default=[])
@@ -32,6 +33,8 @@ class Playlist(db.Document):
     likes = db.IntField(default=0)
     #uuid
     uuid = db.StringField(required=True, unique=True)
+    #duration
+    duration = db.IntField(default=0)
 
 
     

@@ -45,7 +45,7 @@ class RegistrationForm(FlaskForm):
         #check if includes number and special character
         specialchars= '!@#$%^&*()_+{}|:"<>?`-=[]\;\',./'
         if not any(char.isdigit() for char in password.data) and not any(char in specialchars for char in password.data):
-            raise ValidationError("Password must contain at least one number or special character" )
+            raise ValidationError("Password must contain at least one number and special character" )
         
         
 

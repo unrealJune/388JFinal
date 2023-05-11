@@ -1,0 +1,74 @@
+{% extends "header.html" %}
+{% block content %}
+
+<script>
+
+</script>
+
+
+
+
+
+<div class="mdl-grid">
+
+    <div class="mdl-cell--3-col" style="padding-left: 40px; padding-right: 10px;">
+
+       
+
+    </div>
+    <div class="mdl-cell--5-col" style="padding-left: 50px;">
+        {% if playlists %}
+        <h4>Liked Playlists!</h4>
+        <table class="mdl-data-table mdl-js-data-table" style="width: 700;">
+            <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Name</th>
+                    <th class="mdl-data-table__cell--non-numeric">Description</th>
+
+                    <th class="mdl-data-table__cell--non-numeric">Duration</th>
+                    <th class="mdl-data-table__cell--non-numeric">Likes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pl in playlists %}
+                <tr>
+
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.name }}</td>
+                    {% if pl.description|length > 15 %}
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.description[:15] }}...</td>
+                    {% else %}
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.description }}</td>
+                    {% endif %}
+
+                    <td class="mdl-data-table__cell--non-numeric">{{ 
+                        (pl.duration / 1000 // 60)|int }}:{{
+                        (pl.duration / 1000 % 60)|int }}
+                    
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ pl.likes }}</td>
+                    <td class="mdl-data-table__cell--non-numeric" >
+                        <a href="{{ url_for('playlists.view', uuid=pl.uuid) }}", title="View Playlist">
+                            <span class="material-icons" style="color:black;">
+                                chevron_right
+                                </span>
+                        </a>
+                    </td>
+
+
+
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h6>No results found!</h6>
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}

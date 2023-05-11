@@ -18,9 +18,20 @@
         <h6>Search for playlists, or create your own!</h6>
         <h6>Click on the "Create Playlist" button to get started!</h6>
         <h7>Registration required to like, create, and edit playlists.</h7>
+        <br>
+        <a href="{{ url_for('playlists.about') }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            About
+        </a>
        
 
     </div>
+    <div class="mdl-cell--4-col">
+
+     
+
+    </div>
+
+    
     <div class="mdl-cell--4-col">
         <h4>Search For Playlists!</h4>
         <form action="/" class="" method="POST">
@@ -43,60 +54,62 @@
            
         </form>
        
-
+      
     </div>
 
-    
-    <div class="mdl-cell--4-col">
-        
+
+</div>
+<div class="mdl-grid">
+    <div class="mdl-cell--3-col"></div>
+    <div class="mdl-cell--3-col">
         <h4>Top Playlists!</h4>
-        {% if playlists %}
-        <table class="mdl-data-table mdl-js-data-table">
-            <thead>
-              <tr>
-                <th class="mdl-data-table__cell--non-numeric">Name</th>
-                <th class="mdl-data-table__cell--non-numeric">Description</th>
-                <th class="mdl-data-table__cell--non-numeric">Duration</th>
-                <th class="mdl-data-table__cell--non-numeric">Likes</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for pl in playlists %}
-                <tr>
-                   
-                    <td class="mdl-data-table__cell--non-numeric" >{{ pl.name }}</td>
-                    {% if pl.description|length > 15 %}
-                    <td class="mdl-data-table__cell--non-numeric">{{ pl.description[:15] }}...</td>
-                    {% else %}
-                    <td class="mdl-data-table__cell--non-numeric">{{ pl.description }}</td>
-                    {% endif %}
-                    <td class="mdl-data-table__cell--non-numeric">{{ 
-                        (pl.duration / 1000 // 60)|int }}:{{
-                        (pl.duration / 1000 % 60)|int }}
-                    
-                    </td>
-                    <td class="mdl-data-table__cell--non-numeric" >{{ pl.likes }}</td>
-                    <td class="mdl-data-table__cell--non-numeric" >
-                        <a href="{{ url_for('playlists.view', uuid=pl.uuid) }}", title="View Playlist">
-                            <span class="material-icons" style="color:black;">
-                                chevron_right
-                                </span>
-                        </a>
-                    </td>
-
-                    
-                   
-                    
-                  </tr>
-                {% endfor %}
-            </tbody>
-          </table>
+{% if playlists %}
+<table class="mdl-data-table mdl-js-data-table">
+    <thead>
+      <tr>
+        <th class="mdl-data-table__cell--non-numeric">Name</th>
+        <th class="mdl-data-table__cell--non-numeric">Description</th>
+        <th class="mdl-data-table__cell--non-numeric">Duration</th>
+        <th class="mdl-data-table__cell--non-numeric">Likes</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for pl in playlists %}
+        <tr>
+           
+            <td class="mdl-data-table__cell--non-numeric" >{{ pl.name }}</td>
+            {% if pl.description|length > 15 %}
+            <td class="mdl-data-table__cell--non-numeric">{{ pl.description[:15] }}...</td>
             {% else %}
-            <h6>No playlists found!</h6>
+            <td class="mdl-data-table__cell--non-numeric">{{ pl.description }}</td>
             {% endif %}
+            <td class="mdl-data-table__cell--non-numeric">{{ 
+                (pl.duration / 1000 // 60)|int }}:{{
+                (pl.duration / 1000 % 60)|int }}
+            
+            </td>
+            <td class="mdl-data-table__cell--non-numeric" >{{ pl.likes }}</td>
+            <td class="mdl-data-table__cell--non-numeric" >
+                <a href="{{ url_for('playlists.view', uuid=pl.uuid) }}", title="View Playlist">
+                    <span class="material-icons" style="color:black;">
+                        chevron_right
+                        </span>
+                </a>
+            </td>
+
+            
+           
+            
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+    {% else %}
+    <h6>No playlists found!</h6>
+    {% endif %}
 
     </div>
-
+    <div class="mdl-cell--3-col"></div>
 
 </div>
 

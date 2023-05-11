@@ -16,11 +16,6 @@ def index():
     #get top 10 playlists
     playlists = Playlist.objects.order_by('-likes').limit(10)
 
-    #calculate duration of playlist
-    for playlist in playlists:
-        playlist.duration = 0
-        for song in playlist.songs:
-            playlist.duration += SongClient().get_track_by_mbid(song).duration
 
     
 
@@ -58,9 +53,8 @@ def edit(uuid):
             
             try:
                 song.mbid
-                playlist.songs.append(song.mbid)
-                playlist.save()
-                return redirect(url_for('playlists.edit', uuid=playlist.uuid))
+            
+                return redirect(url_for('playlists.addSong', uuid=playlist.uuid, mbid=song.mbid))
             except:
                 flash('Song not found', 'danger')
                 return redirect(url_for('playlists.edit', uuid=playlist.uuid))
@@ -127,13 +121,6 @@ def search(query):
     playlists = Playlist.objects(name__icontains=query).order_by('-likes')
 
 
-        #calculate duration of playlist
-    for playlist in playlists:
-        playlist.duration = 0
-        for song in playlist.songs:
-            track = SongClient().get_track_by_mbid(song)
-            playlist.duration += track.duration
-            playlist.save()
 
 
     return render_template('search.html', title="Search", playlists=playlists, query=query, form=form)
@@ -146,6 +133,7 @@ def deleteSong(uuid, mbid):
         return redirect(url_for('playlists.index'))
     else:
         playlist.songs.remove(mbid)
+        playlist.duration -= SongClient().get_track_by_mbid(mbid).duration
         playlist.save()
         return redirect(url_for('playlists.edit', uuid=playlist.uuid))
     
@@ -158,6 +146,7 @@ def addSong(uuid, mbid):
         return redirect(url_for('playlists.index'))
     else:
         playlist.songs.append(mbid)
+        playlist.duration += SongClient().get_track_by_mbid(mbid).duration
         playlist.save()
         return redirect(url_for('playlists.edit', uuid=playlist.uuid))
     
@@ -180,9 +169,8 @@ def view(uuid):
         if form.validate_on_submit():
             return redirect(url_for('playlists.search', query=form.search_query.data))
         
-        total_duration = 0
-        for song in songs:
-            total_duration += song.duration
+        total_duration = playlist.duration
+ 
 
         liked = False
         if current_user.is_authenticated:
@@ -220,3 +208,7 @@ def like(uuid):
                 playlist.likes += 1
                 playlist.save()
                 return redirect(url_for('playlists.view', uuid=playlist.uuid))
+            
+@playlists.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html', title="About")

@@ -23,6 +23,10 @@
         </td></h6>
         <h6>Total Number of Likes: {{ total_likes }}</h6>
 
+        <a href="{{ url_for('user.liked', username=user.username) }}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Liked Playlists
+        
+        </a>
 
         
        
