@@ -6,5 +6,5 @@ tags:
   - flask
 ---
 
-# CMSC388J Final Project. 
+# CMSC388J Final Project.  
 Hosted Here: [LINK](https://flask-production-b26c.up.railway.app/)
